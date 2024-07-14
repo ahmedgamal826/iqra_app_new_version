@@ -1,0 +1,66 @@
+[
+  {
+    "id" : 1,
+    "name" : "أذكار الصباح",
+    "icon": "assets/images/morning.png"
+  },
+
+  {
+    "id" : 2,
+    "name" : "أذكار المساء",
+    "icon": "assets/images/cloudy-night.png"
+  },
+
+  {
+    "id" : 3,
+    "name" : "أذكار الحج والعمرة",
+    "icon" : "assets/images/umrah.png"
+  },
+
+  {
+    "id" : 4,
+    "name" : "أذكار النوم ",
+    "icon" : "assets/images/boy.png"
+  },
+
+  {
+    "id" : 5,
+    "name" : "أذكار الاستيقاظ ",
+    "icon" : "assets/images/get-up.png"
+  },
+
+  {
+    "id" : 6,
+    "name" : "أذكار الوضوء",
+    "icon" : "assets/images/ablution.png"
+  },
+
+  {
+    "id" : 7,
+    "name" : "أذكار الأذان",
+    "icon" : "assets/images/adhan.png"
+  },
+
+  {
+    "id" : 8,
+    "name" : "أذكار المسجد",
+    "icon" : "assets/images/mosque.png"
+  },
+
+  {
+    "id" : 9,
+    "name" : "أذكار الصلاة",
+    "icon" : "assets/images/islam.png"
+  },
+
+  {
+    "id" : 10,
+    "name" : "أذكار بعد الصلاة",
+    "icon" : "assets/images/after_prayer.png"
+  }
+
+  
+
+
+
+]
