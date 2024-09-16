@@ -1,25 +1,24 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iqra_app_new_version_22/cubit/ahades%20bloc/ahades_cubit.dart';
-import 'package:iqra_app_new_version_22/cubit/ahades%20bloc/ahades_states.dart';
+import 'package:iqra_app_new_version_22/cubit/stories%20bloc/stories_cubit.dart';
+import 'package:iqra_app_new_version_22/cubit/stories%20bloc/stories_states.dart';
 
-class PageAhadesDetails extends StatefulWidget {
+class StoriesDetailsScreen extends StatefulWidget {
   final int id;
   final String title;
 
-  const PageAhadesDetails({Key? key, required this.id, required this.title})
+  const StoriesDetailsScreen({Key? key, required this.id, required this.title})
       : super(key: key);
 
   @override
   PageAhadesDetailsState createState() => PageAhadesDetailsState();
 }
 
-class PageAhadesDetailsState extends State<PageAhadesDetails> {
+class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AhadesCubit()..loadSectionAhadesDetails(widget.id),
+      create: (context) => StoriesCubit()..loadSectionStoriesDetails(widget.id),
       child: Scaffold(
         backgroundColor: const Color(0xffE6DECB),
         appBar: AppBar(
@@ -38,15 +37,15 @@ class PageAhadesDetailsState extends State<PageAhadesDetails> {
           ),
           backgroundColor: Colors.brown,
         ),
-        body: BlocBuilder<AhadesCubit, AhadesStates>(
+        body: BlocBuilder<StoriesCubit, StoriesStates>(
           builder: (context, state) {
-            if (state is AhadesLoading) {
+            if (state is StoriesLoading) {
               return const Center(
                 child: CircularProgressIndicator(
                   color: Colors.brown,
                 ),
               );
-            } else if (state is AhadesSectionDetailsLoaded) {
+            } else if (state is StoriesSectionDetailsLoaded) {
               final sectionDetails = state.sectionDetails
                   .where((detail) => detail.sectionId == widget.id)
                   .toList();
@@ -67,6 +66,15 @@ class PageAhadesDetailsState extends State<PageAhadesDetails> {
                       children: [
                         Center(
                           child: ListTile(
+                            title: Text(
+                              textAlign: TextAlign.center,
+                              "${sectionDetails[index].reference}",
+                              textDirection: TextDirection.rtl,
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             subtitle: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -98,7 +106,7 @@ class PageAhadesDetailsState extends State<PageAhadesDetails> {
                   itemCount: sectionDetails.length,
                 ),
               );
-            } else if (state is AhadesError) {
+            } else if (state is StoriesError) {
               return Center(child: Text('Error: ${state.message}'));
             }
             return const SizedBox.shrink();

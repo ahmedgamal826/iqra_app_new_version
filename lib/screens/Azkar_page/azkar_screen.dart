@@ -1,27 +1,20 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iqra_app_new_version_22/cubit/azkar%20bloc/azkar_cubit.dart';
+import 'package:iqra_app_new_version_22/cubit/azkar%20bloc/azkar_states.dart';
 import 'package:iqra_app_new_version_22/models/sectiom_model.dart';
-import 'package:iqra_app_new_version_22/screens/Azkar_page/section_detail_screen.dart';
+import 'package:iqra_app_new_version_22/widgets/azkar_widgets/section_azkar_item.dart';
 
-class AzkarHomePage extends StatefulWidget {
+class AzkarHomePage extends StatelessWidget {
   const AzkarHomePage({Key? key}) : super(key: key);
 
   @override
-  State<AzkarHomePage> createState() => _AzkarHomePageState();
-}
-
-class _AzkarHomePageState extends State<AzkarHomePage> {
-  List<AzkarModel> sections = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    loadSections();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Call the Cubit's method to load the initial data if needed
+    final azkarCubit = context.read<AzkarCubit>();
+    azkarCubit.loadSectionsFromFile();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -37,7 +30,7 @@ class _AzkarHomePageState extends State<AzkarHomePage> {
           ),
         ],
         title: const Text(
-          "أذكار المسلم ",
+          "أذكار المسلم",
           style: TextStyle(
               fontFamily: 'Tajawal',
               fontSize: 30,
@@ -46,76 +39,73 @@ class _AzkarHomePageState extends State<AzkarHomePage> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView.builder(
-          itemBuilder: (context, index) =>
-              buildSectionItem(model: sections[index]),
-          itemCount: sections.length,
-          physics: BouncingScrollPhysics(),
-        ),
-      ),
-    );
-  }
-
-  Widget buildSectionItem({required AzkarModel model}) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SectionDetailScreen(
-                  id: model.id!,
-                  title: model.name!,
-                )));
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 12.0),
-        width: double.infinity,
-        height: 100,
-        decoration: BoxDecoration(
-          color: model.id! % 2 == 0 ? Colors.brown : Colors.brown.shade400,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Image.asset(
-                '${model.icon}',
-              ),
-            ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Text(
-                "${model.name}",
-                style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+      body: BlocListener<AzkarCubit, AzkarState>(
+        listener: (context, state) {
+          if (state is AzkarError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: ${state.message}')),
+            );
+          }
+        },
+        child: BlocBuilder<AzkarCubit, AzkarState>(
+          builder: (context, state) {
+            if (state is AzkarLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.brown,
                 ),
-              ),
-            ),
-          ],
+              );
+            } else if (state is AzkarSectionsLoaded) {
+              return Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: ListView.builder(
+                  itemBuilder: (context, index) => buildSectionItem(
+                      model: state.sections[index], context: context),
+                  itemCount: state.sections.length,
+                  physics: const BouncingScrollPhysics(),
+                ),
+              );
+            } else if (state is AzkarError) {
+              return Center(child: Text('Error: ${state.message}'));
+            }
+
+            final cachedData = BlocProvider.of<AzkarCubit>(context);
+
+            // Check if cached data is available and show it
+            return FutureBuilder<String?>(
+              future: cachedData.getCachedData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.brown,
+                    ),
+                  );
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  final List<dynamic> jsonList = json.decode(snapshot.data!);
+                  final List<AzkarModel> sections = jsonList
+                      .map((json) => AzkarModel.fromJson(json))
+                      .toList();
+
+                  return Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => buildSectionItem(
+                          model: sections[index], context: context),
+                      itemCount: sections.length,
+                      physics: const BouncingScrollPhysics(),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: Text('لم يتم العثور على بيانات'),
+                  );
+                }
+              },
+            );
+          },
         ),
       ),
     );
-  }
-
-  loadSections() async {
-    DefaultAssetBundle.of(context)
-        .loadString("assets/database/sections_db.json")
-        .then((data) {
-      var response = json.decode(data);
-      // print(response);
-      response.forEach((section) {
-        //print(section["name"]);
-        AzkarModel _section = AzkarModel.fromJson(section);
-        sections.add(_section); // sections ==> List
-      });
-      setState(() {}); // to feel Scaffold with the new data
-    }).catchError((error) {
-      print(error);
-    });
   }
 }

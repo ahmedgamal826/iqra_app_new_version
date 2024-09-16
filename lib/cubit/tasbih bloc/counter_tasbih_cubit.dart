@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iqra_app_new_version_22/cubit/counter%20bloc/counter_tasbih_state.dart';
+import 'package:iqra_app_new_version_22/cubit/tasbih%20bloc/counter_tasbih_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CounterTasbihCubit extends Cubit<CounterTasbihCubitState> {

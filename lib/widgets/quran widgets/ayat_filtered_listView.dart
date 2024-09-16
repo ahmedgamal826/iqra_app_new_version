@@ -28,19 +28,19 @@ class AyatFilteredListview extends StatelessWidget {
             color: Colors.white70,
             borderRadius: 14,
             onTap: () async {
-              int verseNumber = ayatFiltered["verses"][index];
-              int surahNumber = ayatFiltered["result"][index]["surah"];
-              int pageNumber = getPageNumber(surahNumber, verseNumber);
-              saveVerse(pageNumber);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QuranPageView(
-                    pageNumber: pageNumber,
-                    jsonData: jsonData,
-                  ),
-                ),
-              );
+              // int verseNumber = ayatFiltered["verses"][index];
+              // int surahNumber = ayatFiltered["result"][index]["surah"];
+              // int pageNumber = getPageNumber(surahNumber, verseNumber);
+              // saveVerse(pageNumber);
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => QuranPageView(
+              //       pageNumber: pageNumber,
+              //       jsonData: jsonData,
+              //     ),
+              //   ),
+              // );
             },
             child: Text(
               "سورة ${getSurahNameArabic(ayatFiltered["result"][index]["surah"])} - ${getVerse(ayatFiltered["result"][index]["surah"], ayatFiltered["result"][index]["verse"], verseEndSymbol: true)}",

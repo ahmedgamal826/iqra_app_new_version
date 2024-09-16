@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iqra_app_new_version_22/cubit/ahades%20bloc/ahades_cubit.dart';
-import 'package:iqra_app_new_version_22/cubit/ahades%20bloc/ahades_states.dart';
-import 'package:iqra_app_new_version_22/models/ahades_model.dart';
-import 'package:iqra_app_new_version_22/widgets/ahades_widgets/section_ahades_item.dart';
+import 'package:iqra_app_new_version_22/cubit/stories%20bloc/stories_cubit.dart';
+import 'package:iqra_app_new_version_22/cubit/stories%20bloc/stories_states.dart';
+import 'package:iqra_app_new_version_22/models/stories_model.dart';
+import 'package:iqra_app_new_version_22/widgets/stories_widgets/section_stories_item.dart';
 
-class HomePageAhades extends StatelessWidget {
-  const HomePageAhades({Key? key}) : super(key: key);
+class StoriesScreen extends StatelessWidget {
+  const StoriesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Call the Cubit's method to load the initial data if needed
-    final ahadesCubit = context.read<AhadesCubit>();
-    ahadesCubit.loadSectionsFromFile(); // تحميل البيانات من الملف
+    final storiesCubit = context.read<StoriesCubit>();
+    storiesCubit.loadSectionsFromFile(); // تحميل البيانات من الملف
 
     return Scaffold(
       appBar: AppBar(
@@ -27,14 +27,14 @@ class HomePageAhades extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Image.asset(
-              'assets/images/prophet_mosque.png',
+              'assets/images/stories_icon.png',
               color: Colors.white,
               width: 45,
             ),
           ),
         ],
         title: const Text(
-          "الأحاديث الشريفة ",
+          "قصص اسلامية",
           style: TextStyle(
               fontFamily: 'Tajawal',
               fontSize: 30,
@@ -43,39 +43,55 @@ class HomePageAhades extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: BlocListener<AhadesCubit, AhadesStates>(
+      body: BlocListener<StoriesCubit, StoriesStates>(
         listener: (context, state) {
-          if (state is AhadesError) {
+          if (state is StoriesError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Error: ${state.message}')),
             );
           }
         },
-        child: BlocBuilder<AhadesCubit, AhadesStates>(
+        child: BlocBuilder<StoriesCubit, StoriesStates>(
           builder: (context, state) {
-            if (state is AhadesLoading) {
+            if (state is StoriesLoading) {
               return const Center(
                 child: CircularProgressIndicator(
                   color: Colors.brown,
                 ),
               );
-            } else if (state is AhadesSectionsLoaded) {
-              // عرض البيانات المحملة من الملف
+            } else if (state is StoriesSectionsLoaded) {
               return Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: ListView.builder(
-                  itemBuilder: (context, index) => buildSectionAhadesItem(
-                      model: state.Ahadessections[index], context: context),
-                  itemCount: state.Ahadessections.length,
+                child: GridView.builder(
+                  itemCount: state.Storiessections.length,
                   physics: const BouncingScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12.0,
+                    mainAxisSpacing: 12.0,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemBuilder: (context, index) => buildSectionStoriesItem(
+                      model: state.Storiessections[index], context: context),
                 ),
               );
-            } else if (state is AhadesError) {
+            }
+
+            // return Padding(
+            //   padding: const EdgeInsets.all(12.0),
+            //   child: ListView.builder(
+            //     itemBuilder: (context, index) => buildSectionStoriesItem(
+            //         model: state.Storiessections[index], context: context),
+            //     itemCount: state.Storiessections.length,
+            //     physics: const BouncingScrollPhysics(),
+            //   ),
+            // );
+            else if (state is StoriesError) {
               return Center(child: Text('Error: ${state.message}'));
             }
 
             // عرض البيانات المخزنة مؤقتاً في SharedPreferences
-            final cachedData = BlocProvider.of<AhadesCubit>(context);
+            final cachedData = BlocProvider.of<StoriesCubit>(context);
 
             return FutureBuilder<String?>(
               future: cachedData.getCachedData(),
@@ -88,14 +104,14 @@ class HomePageAhades extends StatelessWidget {
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {
                   final List<dynamic> jsonList = json.decode(snapshot.data!);
-                  final List<AhadesModel> sections = jsonList
-                      .map((json) => AhadesModel.fromJson(json))
+                  final List<StoriesModel> sections = jsonList
+                      .map((json) => StoriesModel.fromJson(json))
                       .toList();
 
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: ListView.builder(
-                      itemBuilder: (context, index) => buildSectionAhadesItem(
+                      itemBuilder: (context, index) => buildSectionStoriesItem(
                           model: sections[index], context: context),
                       itemCount: sections.length,
                       physics: const BouncingScrollPhysics(),

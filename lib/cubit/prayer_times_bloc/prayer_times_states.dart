@@ -1,7 +1,10 @@
-// Base State
 import 'package:iqra_app_new_version_22/models/prayer_times_model.dart';
 
-abstract class PrayerTimesState {}
+abstract class PrayerTimesState {
+  // final bool isLoading;
+
+  // PrayerTimesState({this.isLoading = false});
+}
 
 // Initial State (when nothing has happened yet)
 class PrayerTimesInitial extends PrayerTimesState {}

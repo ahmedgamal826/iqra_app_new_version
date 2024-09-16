@@ -1,40 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class QiblaScreen extends StatelessWidget {
-//   const QiblaScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         iconTheme: const IconThemeData(
-//           color: Colors.white,
-//           size: 30,
-//         ),
-//         backgroundColor: Colors.brown,
-//         centerTitle: true,
-//         title: const Text(
-//           'القبلة',
-//           style: TextStyle(
-//             fontSize: 30,
-//             fontWeight: FontWeight.bold,
-//             color: Colors.white,
-//           ),
-//         ),
-//         actions: [
-//           Padding(
-//             padding: const EdgeInsets.only(right: 10),
-//             child: Image.asset(
-//               'assets/images/qibla_icon.png',
-//               width: 43,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -96,8 +59,6 @@ class _QiblahScreenState extends State<QiblahScreen>
         ],
       ),
       backgroundColor: Colors.brown,
-      // backgroundColor: Color.fromARGB(255, 159, 153, 101),
-      // backgroundColor: const Color.fromARGB(255, 48, 48, 48),
       body: StreamBuilder<QiblahDirection>(
         stream: FlutterQiblah.qiblahStream,
         builder: (context, snapshot) {
@@ -137,7 +98,6 @@ class _QiblahScreenState extends State<QiblahScreen>
                         angle: animation!.value,
                         child: Image.asset(
                           'assets/images/qibla_original.png',
-                          //color: Colors.brown,
                         ),
                       ),
                     ),
@@ -147,8 +107,13 @@ class _QiblahScreenState extends State<QiblahScreen>
             );
           } else {
             return const Center(
-                child: Text('Error retrieving Qiblah direction.',
-                    style: TextStyle(color: Colors.white)));
+              child: Text(
+                'Error retrieving Qiblah direction.',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            );
           }
         },
       ),

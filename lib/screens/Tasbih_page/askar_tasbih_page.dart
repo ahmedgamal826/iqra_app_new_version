@@ -1,8 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iqra_app_new_version_22/cubit/counter%20bloc/counter_cubit.dart';
-import 'package:iqra_app_new_version_22/cubit/counter%20bloc/counter_tasbih_state.dart';
+import 'package:iqra_app_new_version_22/cubit/tasbih%20bloc/counter_tasbih_cubit.dart';
+import 'package:iqra_app_new_version_22/cubit/tasbih%20bloc/counter_tasbih_state.dart';
 import 'package:iqra_app_new_version_22/widgets/tasbih%20widgets/custom_circle_avatar.dart';
 
 class AzkarTasbihScreen extends StatefulWidget {

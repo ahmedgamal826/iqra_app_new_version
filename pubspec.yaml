@@ -30,8 +30,10 @@ environment:
 dependencies:
   arabic_numbers: ^1.0.0
   awesome_dialog: ^3.2.1
+  connectivity_plus: ^6.0.5
   cupertino_icons: ^1.0.6
   easy_container: ^1.0.4+1
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.4
@@ -109,6 +111,17 @@ flutter:
     - assets/images/prayer1.jpg
     - assets/images/prayer2.jpg
     - assets/images/basmala_dark55.png
+    - assets/images/قصة_ادم_عليه_السلام.jpg
+    - assets/images/قصة_النبي_أيوب.jpg
+    - assets/images/قصة_سليمان_عليه_السلام.jpg
+    - assets/images/قصة_سورة_البقرة.jpg
+    - assets/images/قصة_سيدنا_ابراهيم.jpg
+    - assets/images/قصة_سيدنا_يعقوب.jpg
+    - assets/images/قصة_فرعون.jpg
+    - assets/images/قصة_موسى_عليه_السلام.jpg
+    - assets/images/قصة_يوسف_عليه_السلام.jpg
+    - assets/images/stories_icon.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
