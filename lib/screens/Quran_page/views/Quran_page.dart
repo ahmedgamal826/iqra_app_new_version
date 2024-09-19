@@ -242,23 +242,6 @@ class _QuranPageState extends State<QuranPage> {
                             child: EasyContainer(
                               color: Colors.white70,
                               borderRadius: 14,
-                              // onTap: () async {
-                              //   int verseNumber = ayatFiltered["verses"][index];
-                              //   int surahNumber =
-                              //       ayatFiltered["result"][index]["surah"];
-                              //   int pageNumber =
-                              //       getPageNumber(surahNumber, verseNumber);
-                              //   saveVerse(pageNumber);
-                              //   Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => QuranPageView(
-                              //         pageNumber: pageNumber,
-                              //         jsonData: widget.suraJsonData,
-                              //       ),
-                              //     ),
-                              //   );
-                              // },
                               child: Text(
                                 "سورة ${getSurahNameArabic(ayatFiltered["result"][index]["surah"])} - ${getVerse(ayatFiltered["result"][index]["surah"], ayatFiltered["result"][index]["verse"], verseEndSymbol: true)}",
                                 textDirection: TextDirection.rtl,

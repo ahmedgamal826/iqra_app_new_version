@@ -224,6 +224,7 @@ import 'package:flutter/material.dart';
 import 'package:iqra_app_new_version_22/models/gridItem_names_model.dart';
 import 'package:iqra_app_new_version_22/screens/More%20Screens/Ahades_page/home_page_ahades.dart';
 import 'package:iqra_app_new_version_22/screens/More%20Screens/Names_page/Names.dart';
+import 'package:iqra_app_new_version_22/screens/More%20Screens/Nearby_mosques.dart/mosque_list_screen.dart';
 import 'package:iqra_app_new_version_22/screens/Qiblah%20Screen/qibla_screen.dart';
 import 'package:iqra_app_new_version_22/screens/Stories%20Screens/stories_screen.dart';
 
@@ -254,6 +255,13 @@ class MoreScreen extends StatelessWidget {
         imagePath: 'assets/images/stories_icon.png',
         destinationPage: StoriesScreen(), // Replace with the actual page
       ),
+      // GridItem(
+      //   name: 'المساجد القريبة',
+      //   imagePath: 'assets/images/prophet.png',
+      //   destinationPage: MosqueListScreen(
+      //     mosques: [],
+      //   ), // Replace with the actual page
+      // ),
     ];
 
     return Scaffold(

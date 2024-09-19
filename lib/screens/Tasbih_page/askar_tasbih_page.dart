@@ -133,13 +133,13 @@ class _AzkarTasbihScreenState extends State<AzkarTasbihScreen> {
               Container(
                 width: 130,
                 height: 120,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.brown,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(50),
                         bottomRight: Radius.circular(50))),
               ),
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 15,
                 backgroundColor: Colors.white,
               )

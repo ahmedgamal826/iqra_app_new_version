@@ -3,9 +3,11 @@ import 'package:iqra_app_new_version_22/globalhelpers/constants.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/prayer_complete_quran.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/provider_brightness.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/settings.dart';
+import 'package:iqra_app_new_version_22/widgets/drawer_widgets/show_snack_bar.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/stop_signs.dart';
-
 import 'package:provider/provider.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // استيراد مكتبة shared_preferences
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
@@ -16,6 +18,66 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   bool isSwitched = false;
+  bool isWakelockEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadWakelockState();
+  }
+
+  // load wakeloct state using shared preference
+  Future<void> loadWakelockState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? savedWakelockState = prefs.getBool('wakelockEnabled');
+    setState(() {
+      isWakelockEnabled = savedWakelockState ?? false;
+      if (isWakelockEnabled) {
+        WakelockPlus.enable();
+      }
+    });
+  }
+
+  // save wakeloct state using shared preference
+  Future<void> saveWakelockState(bool enabled) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('wakelockEnabled', enabled);
+  }
+
+  void toggleDarkMode(BuildContext context) {
+    setState(() {
+      isSwitched = !isSwitched;
+
+      if (isSwitched) {
+        customShowSnackBar(context: context, content: 'تم تفعيل الوضع الليلي');
+      } else {
+        customShowSnackBar(context: context, content: 'تم تعطيل الوضع الليلي');
+      }
+    });
+  }
+
+  void toggleWakelock(BuildContext context) {
+    setState(() {
+      isWakelockEnabled = !isWakelockEnabled;
+
+      if (isWakelockEnabled) {
+        WakelockPlus.enable();
+        saveWakelockState(true);
+
+        customShowSnackBar(
+            context: context,
+            content: 'تم تفعيل خاصية عدم إطفاء الشاشة أثناء القراءة');
+      } else {
+        WakelockPlus.disable();
+        saveWakelockState(false);
+
+        customShowSnackBar(
+            context: context,
+            content: 'تم تعطيل خاصية عدم إطفاء الشاشة أثناء القراءة');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<providerBrightness>(
@@ -41,10 +103,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              'assets/images/quran.png',
-                              width: 90,
-                            ),
+                            Image.asset('assets/images/quran.png', width: 90),
                             Text(
                               'القرآن الكريم',
                               style: TextStyle(
@@ -64,7 +123,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       color: brightness.isDark
                           ? Colors.black
                           : const Color(0xffF1EEE5),
-                      child: Column(
+                      child: ListView(
                         children: [
                           InkWell(
                             splashColor: Colors.grey,
@@ -132,11 +191,43 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             },
                             child: ListTile(
                               leading: Image.asset(
-                                'assets/images/stop_signs_image.jpg',
-                                width: 40,
-                              ),
+                                  'assets/images/stop_signs_image.jpg',
+                                  width: 40),
                               title: Text(
                                 'علامات الوقف',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: brightness.isDark
+                                      ? Colors.white
+                                      : blackColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              toggleWakelock(context);
+                            },
+                            child: ListTile(
+                              leading: IconButton(
+                                onPressed: () {
+                                  toggleWakelock(context);
+                                },
+                                icon: Icon(
+                                  isWakelockEnabled
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  size: 30,
+                                  color: isWakelockEnabled
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              ),
+                              title: Text(
+                                isWakelockEnabled
+                                    ? 'تفعيل خاصية عدم اطفاء الشاشة'
+                                    : 'تعطيل خاصية عدم اطفاء الشاشة',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -161,13 +252,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     value: themeProvider.isDark,
                                     onChanged: (value) {
                                       setState(() {
+                                        toggleDarkMode(context);
                                         themeProvider.changeTheme();
                                       });
                                     });
                               },
                             ),
                             title: Text(
-                              'تفعيل الوضع الليلي',
+                              'الوضع الليلي',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -181,7 +273,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

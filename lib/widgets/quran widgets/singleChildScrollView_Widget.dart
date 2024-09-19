@@ -20,49 +20,53 @@ class SingleChildScrollViewWidget extends StatelessWidget {
     return Consumer<providerBrightness>(
       builder: (context, brightness, child) {
         return SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: screenWidth / 3),
-                    child: Text(
-                      'سُورَةٌ ${jsonData[getPageData(index)[0]['surah'] - 1]["name"]}',
-                      style: TextStyle(
-                          fontSize: 18 * textScaleFactor,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              brightness.isDark ? Colors.white : Colors.black),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Text(
-                    "$index",
-                    style: TextStyle(
-                      fontSize: 18 * textScaleFactor,
-                      fontWeight: FontWeight.bold,
-                      color: brightness.isDark ? Colors.white : Colors.black,
-                    ),
-                  ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: screenWidth / 3.8),
-                    child: Container(
-                      child: Center(
-                        child: PartIndicator(index),
+          child: Container(
+            color: brightness.isDark ? Colors.black : Color(0xffF5EED8),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: screenWidth / 3),
+                      child: Text(
+                        'سُورَةٌ ${jsonData[getPageData(index)[0]['surah'] - 1]["name"]}',
+                        style: TextStyle(
+                            fontSize: 18 * textScaleFactor,
+                            fontWeight: FontWeight.bold,
+                            color: brightness.isDark
+                                ? Colors.white
+                                : Colors.black),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CustomDirectionality(
-                index: index,
-                jsonData: jsonData,
-              )
-            ],
+                    Text(
+                      "$index",
+                      style: TextStyle(
+                        fontSize: 18 * textScaleFactor,
+                        fontWeight: FontWeight.bold,
+                        color: brightness.isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: screenWidth / 3.8),
+                      child: Container(
+                        child: Center(
+                          child: PartIndicator(index),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomDirectionality(
+                  index: index,
+                  jsonData: jsonData,
+                )
+              ],
+            ),
           ),
         );
       },

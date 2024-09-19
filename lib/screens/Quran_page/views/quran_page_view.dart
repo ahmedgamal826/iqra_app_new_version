@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:iqra_app_new_version_22/globalhelpers/constants.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/provider_brightness.dart';
+import 'package:iqra_app_new_version_22/widgets/drawer_widgets/show_snack_bar.dart';
 import 'package:iqra_app_new_version_22/widgets/quran%20widgets/page_juz_map.dart';
 import 'package:iqra_app_new_version_22/widgets/quran%20widgets/singleChildScrollView_Widget.dart';
 import 'package:provider/provider.dart';
@@ -116,7 +117,7 @@ class _QuranPageViewState extends State<QuranPageView> {
     return Consumer<providerBrightness>(
       builder: (context, brightness, child) {
         return Scaffold(
-          backgroundColor: brightness.isDark ? Colors.black : Colors.yellow,
+          backgroundColor: brightness.isDark ? Colors.black : Colors.white,
           body: PageView.builder(
             reverse: true,
             scrollDirection: Axis.horizontal,
@@ -148,7 +149,7 @@ class _QuranPageViewState extends State<QuranPageView> {
                           return Scaffold(
                             backgroundColor: brightness.isDark
                                 ? Colors.black
-                                : const Color(0xffF5EDD8),
+                                : const Color(0xffF5EED8),
                             appBar: AppBar(
                               iconTheme: IconThemeData(
                                 color: brightness.isDark
@@ -157,7 +158,7 @@ class _QuranPageViewState extends State<QuranPageView> {
                               ),
                               backgroundColor: brightness.isDark
                                   ? Colors.black
-                                  : const Color(0xffF5EDD8),
+                                  : const Color(0xffF5EED8),
                               centerTitle: true,
                               title: Text(
                                 'القرآن الكريم',
@@ -181,45 +182,14 @@ class _QuranPageViewState extends State<QuranPageView> {
                                     if (isPageSaved &&
                                         index == savedPageNumber) {
                                       deleteSavedPage();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            textDirection: TextDirection.rtl,
-                                            'تم حذف الصفحة المحفوظة',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: brightness.isDark
-                                                  ? Colors.black
-                                                  : Colors.white,
-                                            ),
-                                          ),
-                                          backgroundColor: brightness.isDark
-                                              ? Colors.white
-                                              : Colors.brown,
-                                        ),
-                                      );
+                                      customShowSnackBar(
+                                          context: context,
+                                          content: 'تم حذف الصفحة المحفوظة');
                                     } else {
                                       savePage(pageController.page!.toInt());
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            textDirection: TextDirection.rtl,
-                                            'تم حفظ الصفحة ',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: brightness.isDark
-                                                    ? blackColor
-                                                    : Colors.white),
-                                          ),
-                                          backgroundColor: brightness.isDark
-                                              ? Colors.white
-                                              : Colors.brown,
-                                        ),
-                                      );
+                                      customShowSnackBar(
+                                          context: context,
+                                          content: 'تم حفظ الصفحة ');
                                     }
                                   },
                                 ),

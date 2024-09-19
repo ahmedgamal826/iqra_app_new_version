@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:iqra_app_new_version_22/cubit/stories%20bloc/stories_states.dart';
-import 'package:iqra_app_new_version_22/models/ahades_details_model.dart';
-import 'package:iqra_app_new_version_22/models/ahades_model.dart';
 import 'package:iqra_app_new_version_22/models/stories_details_model.dart';
 import 'package:iqra_app_new_version_22/models/stories_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
