@@ -24,11 +24,14 @@ Widget buildSectionAhadesItem(
       width: double.infinity,
       height: 100,
       decoration: BoxDecoration(
-        color: model.id! % 2 == 0 ? Colors.brown : Colors.brown.shade400,
-        borderRadius: BorderRadius.circular(50),
+        color: Colors.brown,
+        border: Border.all(color: Colors.black, width: 1.5),
+        // color: model.id! % 2 == 0 ? Colors.brown : Colors.brown.shade400,
+        borderRadius: BorderRadius.circular(7),
       ),
       child: Center(
         child: Text(
+          textAlign: TextAlign.center,
           "${model.name}",
           style: const TextStyle(
             fontSize: 27,

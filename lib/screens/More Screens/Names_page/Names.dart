@@ -44,8 +44,9 @@ class Names extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.brown,
+              border: Border.all(color: Colors.black, width: 1.5),
             ),
-            child: const Text(
+            child: const SelectableText(
               'الله',
               style: TextStyle(
                   fontSize: 60, fontFamily: 'Rakkas', color: Colors.white),
@@ -69,10 +70,12 @@ class Names extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 21),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
                       color: Colors.brown,
+                      border: Border.all(color: Colors.black, width: 1.5),
+                      borderRadius: BorderRadius.circular(20),
+                      // color: Colors.brown,
                     ),
-                    child: Text(
+                    child: SelectableText(
                       names.text,
                       style: const TextStyle(
                           fontSize: 26,

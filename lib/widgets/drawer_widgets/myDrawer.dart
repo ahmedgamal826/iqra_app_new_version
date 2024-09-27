@@ -7,7 +7,7 @@ import 'package:iqra_app_new_version_22/widgets/drawer_widgets/show_snack_bar.da
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/stop_signs.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // استيراد مكتبة shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});

@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:arabic_numbers/arabic_numbers.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:iqra_app_new_version_22/models/prayer_times_model.dart';
 import 'package:iqra_app_new_version_22/cubit/prayer_times_bloc/prayer_times_states.dart';
+import 'package:iqra_app_new_version_22/screens/Prayer_Times/prayer_times_screen.dart';
+import 'package:iqra_app_new_version_22/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrayerTimesCubit extends Cubit<PrayerTimesState> {
@@ -18,24 +21,25 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     return nextPrayerTime.difference(DateTime.now());
   }
 
-  // Function to save prayer times to SharedPreferences
-  Future<void> savePrayerTimes(PrayerTimes prayerTimes) async {
+// Function to save prayer times to SharedPreferences
+  Future<void> savePrayerTimes(
+      String city, String country, PrayerTimes prayerTimes) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('fajr', prayerTimes.fajr);
-    prefs.setString('dhuhr', prayerTimes.dhuhr);
-    prefs.setString('asr', prayerTimes.asr);
-    prefs.setString('maghrib', prayerTimes.maghrib);
-    prefs.setString('isha', prayerTimes.isha);
+    prefs.setString('$city-$country-fajr', prayerTimes.fajr);
+    prefs.setString('$city-$country-dhuhr', prayerTimes.dhuhr);
+    prefs.setString('$city-$country-asr', prayerTimes.asr);
+    prefs.setString('$city-$country-maghrib', prayerTimes.maghrib);
+    prefs.setString('$city-$country-isha', prayerTimes.isha);
   }
 
-  // Function to load prayer times from SharedPreferences
-  Future<PrayerTimes?> loadPrayerTimes() async {
+// Function to load prayer times from SharedPreferences
+  Future<PrayerTimes?> loadPrayerTimes(String city, String country) async {
     final prefs = await SharedPreferences.getInstance();
-    final fajr = prefs.getString('fajr');
-    final dhuhr = prefs.getString('dhuhr');
-    final asr = prefs.getString('asr');
-    final maghrib = prefs.getString('maghrib');
-    final isha = prefs.getString('isha');
+    final fajr = prefs.getString('$city-$country-fajr');
+    final dhuhr = prefs.getString('$city-$country-dhuhr');
+    final asr = prefs.getString('$city-$country-asr');
+    final maghrib = prefs.getString('$city-$country-maghrib');
+    final isha = prefs.getString('$city-$country-isha');
 
     if (fajr != null &&
         dhuhr != null &&
@@ -53,21 +57,21 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     return null; // Return null if no data is found
   }
 
-  // Function to fetch prayer times from API
-  Future<void> fetchPrayerTimes() async {
+  // Function to fetch prayer times from API or load from SharedPreferences
+  Future<void> fetchPrayerTimes(String city, String country, context) async {
     emit(PrayerTimesLoading());
 
     try {
       final connectivityResult = await _connectivity.checkConnectivity();
 
-      // If no internet connection, load saved data from SharedPreferences
+      // If no internet connection, try to load saved data from SharedPreferences
       if (connectivityResult == ConnectivityResult.none) {
-        final savedPrayerTimes = await loadPrayerTimes();
+        final savedPrayerTimes = await loadPrayerTimes(city, country);
         if (savedPrayerTimes != null) {
           emit(PrayerTimesLoaded(savedPrayerTimes));
         } else {
           emit(PrayerTimesError(
-              'لا يوجد اتصال بالإنترنت ولا توجد بيانات محفوظة.'));
+              'لا يوجد اتصال بالإنترنت ولا توجد بيانات محفوظة لمواقيت الصلاة.'));
         }
         return; // Stop further execution if no internet connection
       }
@@ -76,7 +80,7 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
       DateTime now = DateTime.now();
       String formattedDate = "${now.day}-${now.month}-${now.year}";
       String apiUrl =
-          'https://api.aladhan.com/v1/timingsByCity?city=cairo&country=egypt&date=$formattedDate';
+          'https://api.aladhan.com/v1/timingsByCity?city=$city&country=$country&date=$formattedDate';
       print("API URL: $apiUrl");
 
       var response = await http.get(Uri.parse(apiUrl));
@@ -90,7 +94,7 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
               PrayerTimes.fromJson(data['data']['timings']);
 
           // Save fetched data to local storage (SharedPreferences)
-          await savePrayerTimes(prayerTimes);
+          await savePrayerTimes(city, country, prayerTimes);
 
           emit(PrayerTimesLoaded(prayerTimes));
         } else {
@@ -105,17 +109,70 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
       print('Exception occurred: $e');
 
       // If an error occurs while fetching data, try loading saved data
-      final savedPrayerTimes = await loadPrayerTimes();
+      final savedPrayerTimes = await loadPrayerTimes(city, country);
       if (savedPrayerTimes != null) {
         emit(PrayerTimesLoaded(savedPrayerTimes));
       } else {
-        emit(PrayerTimesError(
-            'حدث خطأ أثناء تحميل مواقيت الصلاة ولا توجد بيانات محفوظة.'));
+        showNoDataDialog(context);
       }
     }
   }
 
-  // get prayer name function
+  void showNoDataDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible:
+          false, // Prevent closing the dialog by tapping outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'تنبيه',
+            textAlign: TextAlign.end,
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Text(
+            textAlign: TextAlign.end,
+            'يرجي الاتصال بالانترنت لجلب البيانات... الآن بعد الإغلاق سيعرض مواقيت الصلاة لدولة مصر ، محافظة القاهرة',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.brown,
+              ),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePageAppApp(
+                      suraJsonData: '',
+                    ),
+                  ),
+                  (route) => false, // Remove all previous routes
+                );
+
+                fetchPrayerTimes(
+                    'Cairo', 'Egypt', context); // جلب مواقيت الصلاة
+              },
+              child: const Text(
+                'إغلاق',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   String getPrayerName(DateTime nextPrayerTime, PrayerTimes prayerTimes) {
     DateFormat dateFormat = DateFormat('HH:mm');

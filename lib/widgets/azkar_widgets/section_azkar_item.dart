@@ -22,33 +22,22 @@ Widget buildSectionItem(
     child: Container(
       margin: const EdgeInsets.only(top: 12.0),
       width: double.infinity,
-      height: 100,
       decoration: BoxDecoration(
-        color: model.id! % 2 == 0 ? Colors.brown : Colors.brown.shade400,
-        borderRadius: BorderRadius.circular(50),
+        color: Colors.brown,
+        border: Border.all(color: Colors.black, width: 1.5),
+        // color: model.id! % 2 == 0 ? Colors.brown : Colors.brown.shade400,
+        borderRadius: BorderRadius.circular(7),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Image.asset(
-              '${model.icon}',
-            ),
+      child: Center(
+        child: Text(
+          textAlign: TextAlign.center,
+          "${model.name}",
+          style: const TextStyle(
+            fontSize: 27,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Text(
-              "${model.name}",
-              style: const TextStyle(
-                fontSize: 23,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     ),
   );

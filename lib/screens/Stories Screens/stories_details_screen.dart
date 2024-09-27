@@ -20,7 +20,7 @@ class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
     return BlocProvider(
       create: (context) => StoriesCubit()..loadSectionStoriesDetails(widget.id),
       child: Scaffold(
-        backgroundColor: const Color(0xffE6DECB),
+        backgroundColor: const Color.fromARGB(255, 239, 231, 214),
         appBar: AppBar(
           iconTheme: const IconThemeData(
             size: 35,
@@ -56,55 +56,57 @@ class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
                   ),
                 );
               }
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: ListView.builder(
-                  reverse: false,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: ListTile(
-                            title: Text(
-                              textAlign: TextAlign.center,
-                              "${sectionDetails[index].reference}",
-                              textDirection: TextDirection.rtl,
-                              style: const TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
+              return ListView.builder(
+                reverse: false,
+                itemBuilder: (context, index) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: ListTile(
+                          title: SelectableText(
+                            textAlign: TextAlign.center,
+                            "${sectionDetails[index].reference}",
+                            textDirection: TextDirection.rtl,
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
                             ),
-                            subtitle: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xffD4BEB0),
-                                shape: BoxShape.rectangle,
-                              ),
-                              child: Text(
-                                "${sectionDetails[index].content}",
-                                textDirection: TextDirection.rtl,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
+                          ),
+                          subtitle: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.orangeAccent.withOpacity(0.1),
+                              border:
+                                  Border.all(color: Colors.brown, width: 1.5),
+                              borderRadius: BorderRadius.circular(7),
+                              // color: const Color(0xffD4BEB0),
+                              shape: BoxShape.rectangle,
+                            ),
+                            child: SelectableText(
+                              "${sectionDetails[index].content}",
+                              textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 3,
-                        )
-                      ],
-                    );
-                  },
-                  itemCount: sectionDetails.length,
-                ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        indent: 25,
+                        endIndent: 25,
+                        color: Colors.black,
+                        thickness: 3,
+                      )
+                    ],
+                  );
+                },
+                itemCount: sectionDetails.length,
               );
             } else if (state is StoriesError) {
               return Center(child: Text('Error: ${state.message}'));

@@ -69,8 +69,10 @@ class PageAhadesDetailsState extends State<PageAhadesDetails> {
                           child: ListTile(
                             subtitle: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xffD4BEB0),
+                                color: Colors.orangeAccent.withOpacity(0.1),
+                                border:
+                                    Border.all(color: Colors.brown, width: 1.5),
+                                borderRadius: BorderRadius.circular(7),
                                 shape: BoxShape.rectangle,
                               ),
                               child: Text(

@@ -22,7 +22,7 @@ class _SectionDetailScreenState extends State<SectionAzkarDetailScreen> {
     return BlocProvider(
       create: (context) => AzkarCubit()..loadSectionDetails(widget.id),
       child: Scaffold(
-        backgroundColor: const Color(0xffE6DECB),
+        backgroundColor: Color.fromARGB(255, 239, 231, 214),
         appBar: AppBar(
           iconTheme: const IconThemeData(
             size: 35,
@@ -59,7 +59,7 @@ class _SectionDetailScreenState extends State<SectionAzkarDetailScreen> {
                 );
               }
               return Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(0),
                 child: ListView.builder(
                   reverse: false,
                   itemBuilder: (context, index) {
@@ -70,11 +70,14 @@ class _SectionDetailScreenState extends State<SectionAzkarDetailScreen> {
                           child: ListTile(
                             subtitle: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xffD4BEB0),
+                                borderRadius: BorderRadius.circular(7),
+                                // color: const Color(0xffD4BEB0),
                                 shape: BoxShape.rectangle,
+                                color: Colors.orangeAccent.withOpacity(0.2),
+                                border:
+                                    Border.all(color: Colors.brown, width: 1.5),
                               ),
-                              child: Text(
+                              child: SelectableText(
                                 "${sectionDetails[index].content}",
                                 textDirection: TextDirection.rtl,
                                 textAlign: TextAlign.center,

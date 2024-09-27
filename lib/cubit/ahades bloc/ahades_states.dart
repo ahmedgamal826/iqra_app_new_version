@@ -26,6 +26,13 @@ class AhadesSectionDetailsLoaded extends AhadesStates {
   List<Object> get props => [sectionDetails];
 }
 
+class AhadesExtraDataLoaded extends AhadesStates {
+  final List<dynamic> sectionExtraDetails;
+  const AhadesExtraDataLoaded({required this.sectionExtraDetails});
+  @override
+  List<Object> get props => [sectionExtraDetails];
+}
+
 class AhadesError extends AhadesStates {
   final String message;
   const AhadesError({required this.message});

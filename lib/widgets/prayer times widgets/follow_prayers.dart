@@ -68,10 +68,10 @@ class _FollowPrayersState extends State<FollowPrayers> {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Container(
           width: double.infinity,
-          height: screenHeight * 0.25,
+          height: screenHeight * 0.23,
           decoration: BoxDecoration(
             color: Colors.brown,
             borderRadius: BorderRadius.circular(20),
