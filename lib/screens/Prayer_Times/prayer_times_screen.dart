@@ -27,6 +27,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   void initState() {
     super.initState();
     _startTimer();
+    BlocProvider.of<PrayerTimesCubit>(context)
+      ..fetchPrayerTimes('Cairo', 'Egypt', context);
   }
 
   void _startTimer() {
@@ -220,10 +222,10 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                     },
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const CloseDialogButton(),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // const CloseDialogButton(),
               ],
             ),
           ),

@@ -103,7 +103,7 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
       } else {
         print('Error: ${response.statusCode}');
         print('Response body: ${response.body}');
-        emit(PrayerTimesError('فشل في تحميل مواقيت الصلاة.'));
+        emit(PrayerTimesError('تحميل.....'));
       }
     } catch (e) {
       print('Exception occurred: $e');
@@ -147,15 +147,17 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
                 backgroundColor: Colors.brown,
               ),
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePageAppApp(
-                      suraJsonData: '',
-                    ),
-                  ),
-                  (route) => false, // Remove all previous routes
-                );
+                Navigator.pop(context);
+                Navigator.pop(context);
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => HomePageAppApp(
+                //       suraJsonData: '',
+                //     ),
+                //   ),
+                //   (route) => false, // Remove all previous routes
+                // );
 
                 fetchPrayerTimes(
                     'Cairo', 'Egypt', context); // جلب مواقيت الصلاة
