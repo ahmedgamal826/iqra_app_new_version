@@ -37,7 +37,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.4
-  flutter_local_notifications: ^16.3.2
   flutter_qiblah: ^3.0.4
   geocoding: ^3.0.0
   geolocator: ^13.0.1
