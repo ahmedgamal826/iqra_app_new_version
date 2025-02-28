@@ -28,7 +28,7 @@ Widget buildSectionStoriesItem(
           width: double.infinity,
           height: screenHeight * 0.11,
           decoration: BoxDecoration(
-            color: model.id! % 2 == 0 ? Colors.brown : Colors.brown.shade400,
+            color: model.id! % 2 == 0 ? Colors.green : Colors.brown.shade400,
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
               image: AssetImage('${model.icon}'),

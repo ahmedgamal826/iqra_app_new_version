@@ -15,8 +15,10 @@ class PrayerTimesLoading extends PrayerTimesState {}
 // Loaded State (when prayer times are successfully fetched)
 class PrayerTimesLoaded extends PrayerTimesState {
   final PrayerTimes prayerTimes;
+  final String country; // متغير الدولة
+  final String province; // متغير المحافظة
 
-  PrayerTimesLoaded(this.prayerTimes);
+  PrayerTimesLoaded(this.prayerTimes, this.country, this.province);
 }
 
 // Error State (when there's an error fetching the prayer times)
@@ -25,3 +27,5 @@ class PrayerTimesError extends PrayerTimesState {
 
   PrayerTimesError(this.error);
 }
+
+class PrayerTimesWaitingForInternet extends PrayerTimesState {}

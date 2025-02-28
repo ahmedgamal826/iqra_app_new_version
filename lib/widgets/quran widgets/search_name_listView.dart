@@ -41,8 +41,10 @@ class SearchNameListView extends StatelessWidget {
             int ayahCount = getVerseCount(suraNumber);
 
             return Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Card(
+                elevation: 7,
+                color: Colors.white,
                 child: ListTile(
                   leading: SizedBox(
                     width: 45,

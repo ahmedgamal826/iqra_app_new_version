@@ -9,16 +9,12 @@
   {
     "id" : 1,
     "name" : "أذكار الصباح",
-    "icon": "assets/images/morning.png"
+    "icon": "assets/images/dohr.png"
   },
 
   
 
-  {
-    "id" : 4,
-    "name" : "أذكار النوم ",
-    "icon" : "assets/images/boy.png"
-  },
+ 
 
   {
     "id" : 3,
@@ -58,6 +54,12 @@
     "icon" : "assets/images/after_prayer.png"
   },
 
+
+  {
+    "id" : 4,
+    "name" : "أذكار النوم ",
+    "icon" : "assets/images/boy.png"
+  },
 
   {
     "id" : 9,

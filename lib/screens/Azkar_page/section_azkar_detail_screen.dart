@@ -22,29 +22,29 @@ class _SectionDetailScreenState extends State<SectionAzkarDetailScreen> {
     return BlocProvider(
       create: (context) => AzkarCubit()..loadSectionDetails(widget.id),
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 239, 231, 214),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           iconTheme: const IconThemeData(
-            size: 35,
+            size: 28,
             color: Colors.white,
           ),
           centerTitle: true,
           title: Text(
             widget.title,
             style: const TextStyle(
-              fontSize: 30,
+              fontSize: 27,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.brown,
+          backgroundColor: Colors.green,
         ),
         body: BlocBuilder<AzkarCubit, AzkarState>(
           builder: (context, state) {
             if (state is AzkarLoading) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               );
             } else if (state is AzkarSectionDetailsLoaded) {
@@ -60,121 +60,121 @@ class _SectionDetailScreenState extends State<SectionAzkarDetailScreen> {
               }
               return Padding(
                 padding: const EdgeInsets.all(0),
-                child: ListView.builder(
-                  reverse: false,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: ListTile(
-                            subtitle: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                // color: const Color(0xffD4BEB0),
-                                shape: BoxShape.rectangle,
-                                color: Colors.orangeAccent.withOpacity(0.2),
-                                border:
-                                    Border.all(color: Colors.brown, width: 1.5),
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  thickness: 8,
+                  child: ListView.builder(
+                    reverse: false,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: ListTile(
+                              subtitle: Card(
+                                elevation: 10,
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "${sectionDetails[index].content}",
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
                               ),
-                              child: SelectableText(
-                                "${sectionDetails[index].content}",
+                              title: Text(
+                                "${sectionDetails[index].reference}",
                                 textDirection: TextDirection.rtl,
-                                textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            title: Text(
-                              "${sectionDetails[index].reference}",
-                              textDirection: TextDirection.rtl,
-                              style: const TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.brown,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    '${index + 1} / ${sectionDetails.length}',
-                                    style: const TextStyle(
-                                      fontSize: 30,
-                                      color: Colors.white,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      int count = int.parse(
+                                          sectionDetails[index].count!);
+
+                                      if (count > 0) {
+                                        count--;
+                                        sectionDetails[index].count =
+                                            count.toString();
+                                      }
+
+                                      if (count == 0 &&
+                                          index == sectionDetails.length - 1) {
+                                        showAwesomeDialog();
+                                      }
+                                    });
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 45,
+                                    backgroundColor: Colors.green,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: sectionDetails[index].count == '0'
+                                          ? const Icon(
+                                              Icons.check,
+                                              size: 45,
+                                              color: Colors.white,
+                                            )
+                                          : RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: sectionDetails[index]
+                                                        .count,
+                                                    style: const TextStyle(
+                                                      fontSize: 25,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text:
+                                                        '/${sectionDetails[index].originalCount}',
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    int count = int.parse(
-                                        sectionDetails[index].count.toString());
-                                    if (count > 0) {
-                                      count--;
-                                      sectionDetails[index].count =
-                                          count.toString();
-                                    }
-
-                                    if (count == 0 &&
-                                        index == sectionDetails.length - 1) {
-                                      showAwesomeDialog();
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    color: Colors.brown,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: sectionDetails[index].count == '0'
-                                        ? const Icon(
-                                            Icons.check,
-                                            size: 38,
-                                            color: Colors.white,
-                                          )
-                                        : Text(
-                                            '${sectionDetails[index].count}',
-                                            style: const TextStyle(
-                                              fontSize: 30,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 3,
-                        )
-                      ],
-                    );
-                  },
-                  itemCount: sectionDetails.length,
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Divider(
+                            indent: 25,
+                            endIndent: 25,
+                            color: Colors.green,
+                            thickness: 3,
+                          )
+                        ],
+                      );
+                    },
+                    itemCount: sectionDetails.length,
+                  ),
                 ),
               );
             } else if (state is AzkarError) {

@@ -31,7 +31,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            backgroundColor: Colors.brown,
+            backgroundColor: Colors.white,
             body: Center(
               child: CircularProgressIndicator(
                 color: Colors.white,

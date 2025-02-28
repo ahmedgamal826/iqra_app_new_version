@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iqra_app_new_version_22/globalhelpers/constants.dart';
+import 'package:iqra_app_new_version_22/screens/Quran%20Audios%20Newwwwww/quran_audio_neww.dart';
+import 'package:iqra_app_new_version_22/screens/Quran_page/views/reciters_view.dart';
+import 'package:iqra_app_new_version_22/widgets/drawer_widgets/custom_card_list_tile.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/prayer_complete_quran.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/provider_brightness.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/settings.dart';
@@ -83,196 +87,118 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return Consumer<providerBrightness>(
       builder: (context, brightness, child) {
         return Drawer(
-          backgroundColor:
-              brightness.isDark ? Colors.black : const Color(0xffF5EDD8),
+          backgroundColor: brightness.isDark ? Colors.black : Colors.white,
           child: Directionality(
             textDirection: TextDirection.rtl,
-            child: ListView(
+            child: Column(
               children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: DrawerHeader(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: brightness.isDark
-                              ? Colors.black
-                              : const Color(0xffF5EDD8),
+                SizedBox(
+                  width: double.infinity,
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: brightness.isDark ? Colors.black : Colors.white,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/quran.png', width: 90),
+                        Text(
+                          'القرآن الكريم',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                brightness.isDark ? Colors.white : blackColor,
+                          ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/images/quran.png', width: 90),
-                            Text(
-                              'القرآن الكريم',
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: brightness.isDark
-                                    ? Colors.white
-                                    : blackColor,
-                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      CustomListTile(
+                          icon: Icons.settings,
+                          title: 'الإعدادات',
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Settings()));
+                          }),
+                      CustomListTile(
+                        icon: FontAwesomeIcons.headphones,
+                        title: 'الإستماع للقرآن',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RecitersListScreen(),
                             ),
-                          ],
+                          );
+                        },
+                      ),
+                      CustomListTile(
+                          icon: FontAwesomeIcons.prayingHands,
+                          title: 'دعاء ختم القرآن',
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PrayerCompleteQuran()));
+                          }),
+                      CustomListTile(
+                          icon: FontAwesomeIcons.bookOpen,
+                          title: 'علامات الوقف',
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const StopSigns()));
+                          }),
+                      CustomListTile(
+                          icon: isWakelockEnabled
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          title: isWakelockEnabled
+                              ? 'تعطيل خاصية عدم إطفاء الشاشة'
+                              : 'تفعيل خاصية عدم إطفاء الشاشة',
+                          onTap: () {
+                            toggleWakelock(context);
+                          }),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 7,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          child: SwitchListTile(
+                            title: const Text('الوضع الليلي',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black)),
+                            secondary: const Icon(
+                              Icons.nightlight_round,
+                              size: 30,
+                              color: Colors.green,
+                            ),
+                            value: brightness.isDark,
+                            onChanged: (value) {
+                              toggleDarkMode(context);
+                              brightness.changeTheme();
+                            },
+                            activeColor: Colors.green,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      color: brightness.isDark
-                          ? Colors.black
-                          : const Color(0xffF1EEE5),
-                      child: ListView(
-                        children: [
-                          InkWell(
-                            splashColor: Colors.grey,
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Settings()));
-                            },
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.settings,
-                                size: 30,
-                                color: brightness.isDark
-                                    ? Colors.white
-                                    : blackColor,
-                              ),
-                              title: Text(
-                                'الاعدادات',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: brightness.isDark
-                                      ? Colors.white
-                                      : blackColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            splashColor: Colors.red,
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const PrayerCompleteQuran()));
-                            },
-                            child: ListTile(
-                              leading: Image.asset(
-                                'assets/images/dua-hands.png',
-                                width: 37,
-                                color: brightness.isDark
-                                    ? Colors.white
-                                    : blackColor,
-                              ),
-                              title: Text(
-                                'دعاء ختم القرآن',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: brightness.isDark
-                                      ? Colors.white
-                                      : blackColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const StopSigns()));
-                            },
-                            child: ListTile(
-                              leading: Image.asset(
-                                  'assets/images/stop_signs_image.jpg',
-                                  width: 40),
-                              title: Text(
-                                'علامات الوقف',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: brightness.isDark
-                                      ? Colors.white
-                                      : blackColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              toggleWakelock(context);
-                            },
-                            child: ListTile(
-                              leading: IconButton(
-                                onPressed: () {
-                                  toggleWakelock(context);
-                                },
-                                icon: Icon(
-                                  isWakelockEnabled
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  size: 30,
-                                  color: isWakelockEnabled
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
-                              ),
-                              title: Text(
-                                isWakelockEnabled
-                                    ? 'تفعيل خاصية عدم اطفاء الشاشة'
-                                    : 'تعطيل خاصية عدم اطفاء الشاشة',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: brightness.isDark
-                                      ? Colors.white
-                                      : blackColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          ListTile(
-                            leading: Consumer<providerBrightness>(
-                              builder: (context, themeProvider, child) {
-                                return Switch(
-                                    focusColor: brightness.isDark
-                                        ? Colors.white
-                                        : blackColor,
-                                    activeColor: brightness.isDark
-                                        ? Colors.white
-                                        : Colors.black,
-                                    inactiveTrackColor: Colors.white,
-                                    value: themeProvider.isDark,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        toggleDarkMode(context);
-                                        themeProvider.changeTheme();
-                                      });
-                                    });
-                              },
-                            ),
-                            title: Text(
-                              'الوضع الليلي',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: brightness.isDark
-                                    ? Colors.white
-                                    : blackColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -2,14 +2,16 @@ import 'dart:convert';
 import 'package:arabic_numbers/arabic_numbers.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:iqra_app_new_version_22/models/prayer_times_model.dart';
 import 'package:iqra_app_new_version_22/cubit/prayer_times_bloc/prayer_times_states.dart';
-import 'package:iqra_app_new_version_22/screens/Prayer_Times/prayer_times_screen.dart';
-import 'package:iqra_app_new_version_22/screens/home_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:translator/translator.dart';
 
 class PrayerTimesCubit extends Cubit<PrayerTimesState> {
   final Connectivity _connectivity = Connectivity();
@@ -26,6 +28,7 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
       String city, String country, PrayerTimes prayerTimes) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('$city-$country-fajr', prayerTimes.fajr);
+    prefs.setString('$city-$country-sunrise', prayerTimes.sunrise);
     prefs.setString('$city-$country-dhuhr', prayerTimes.dhuhr);
     prefs.setString('$city-$country-asr', prayerTimes.asr);
     prefs.setString('$city-$country-maghrib', prayerTimes.maghrib);
@@ -36,18 +39,21 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
   Future<PrayerTimes?> loadPrayerTimes(String city, String country) async {
     final prefs = await SharedPreferences.getInstance();
     final fajr = prefs.getString('$city-$country-fajr');
+    final sunrise = prefs.getString('$city-$country-sunrise');
     final dhuhr = prefs.getString('$city-$country-dhuhr');
     final asr = prefs.getString('$city-$country-asr');
     final maghrib = prefs.getString('$city-$country-maghrib');
     final isha = prefs.getString('$city-$country-isha');
 
     if (fajr != null &&
+        sunrise != null &&
         dhuhr != null &&
         asr != null &&
         maghrib != null &&
         isha != null) {
       return PrayerTimes(
         fajr: fajr,
+        sunrise: sunrise,
         dhuhr: dhuhr,
         asr: asr,
         maghrib: maghrib,
@@ -57,128 +63,83 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     return null; // Return null if no data is found
   }
 
-  // Function to fetch prayer times from API or load from SharedPreferences
-  Future<void> fetchPrayerTimes(String city, String country, context) async {
+  Future<void> fetchPrayerTimes() async {
     emit(PrayerTimesLoading());
 
     try {
-      final connectivityResult = await _connectivity.checkConnectivity();
+      // طلب إذن الوصول إلى الموقع
+      var status = await Permission.location.request();
 
-      // If no internet connection, try to load saved data from SharedPreferences
-      if (connectivityResult == ConnectivityResult.none) {
-        final savedPrayerTimes = await loadPrayerTimes(city, country);
-        if (savedPrayerTimes != null) {
-          emit(PrayerTimesLoaded(savedPrayerTimes));
-        } else {
-          emit(PrayerTimesError(
-              'لا يوجد اتصال بالإنترنت ولا توجد بيانات محفوظة لمواقيت الصلاة.'));
-        }
-        return; // Stop further execution if no internet connection
+      if (status.isDenied) {
+        emit(
+            PrayerTimesError("⚠ يجب السماح بالوصول إلى الموقع لعرض المواقيت."));
+        return;
+      } else if (status.isPermanentlyDenied) {
+        emit(PrayerTimesError(
+            "⚠ تم رفض صلاحية الموقع بشكل دائم. يرجى تفعيلها من إعدادات الجهاز."));
+        return;
       }
 
-      // If internet connection is available, fetch data from API
+      // الحصول على الموقع الجغرافي الحالي
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      // استخدام الإحداثيات للحصول على المدينة والمحافظة والدولة
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      String city = placemarks[0].locality ?? "Unknown"; // المدينة
+      String province =
+          placemarks[0].administrativeArea ?? "Unknown"; // المحافظة
+      String country = placemarks[0].country ?? "Unknown"; // الدولة
+
+      // استخدام الترجمة لتحويل اسم المحافظة إلى الإنجليزية
+      final translator = GoogleTranslator();
+      Translation translated = await translator.translate(province, to: 'en');
+      String translatedProvince = translated.text.trim();
+
+      // الحصول على التاريخ الحالي بصيغة مناسبة للـ API
       DateTime now = DateTime.now();
-      String formattedDate = "${now.day}-${now.month}-${now.year}";
+      var format = DateFormat("dd-MM-yyyy");
+      String currentDate = format.format(now);
+
+      // بناء رابط API لجلب مواقيت الصلاة
       String apiUrl =
-          'https://api.aladhan.com/v1/timingsByCity?city=$city&country=$country&date=$formattedDate';
-      print("API URL: $apiUrl");
+          'https://api.aladhan.com/v1/timingsByCity/$currentDate?city=$translatedProvince&country=$country';
+
+      print("🔹 الدولة: $country");
+      print("🔹 المدينة: $translatedProvince");
 
       var response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-        print("API Response: $data");
 
         if (data['data'] != null && data['data']['timings'] != null) {
           PrayerTimes prayerTimes =
               PrayerTimes.fromJson(data['data']['timings']);
 
-          // Save fetched data to local storage (SharedPreferences)
-          await savePrayerTimes(city, country, prayerTimes);
+          // حفظ البيانات في التخزين المحلي
+          await savePrayerTimes(translatedProvince, country, prayerTimes);
 
-          emit(PrayerTimesLoaded(prayerTimes));
+          emit(PrayerTimesLoaded(prayerTimes, city, country));
         } else {
-          emit(PrayerTimesError('الاستجابة لا تحتوي على بيانات الصلاة.'));
+          emit(PrayerTimesError('⚠ لا توجد بيانات متاحة لمواقيت الصلاة.'));
         }
       } else {
-        print('Error: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        emit(PrayerTimesError('تحميل.....'));
+        emit(PrayerTimesError(
+            '⚠ خطأ أثناء جلب البيانات من الـ API. الكود: ${response.statusCode}'));
       }
     } catch (e) {
-      print('Exception occurred: $e');
-
-      // If an error occurs while fetching data, try loading saved data
-      final savedPrayerTimes = await loadPrayerTimes(city, country);
-      if (savedPrayerTimes != null) {
-        emit(PrayerTimesLoaded(savedPrayerTimes));
-      } else {
-        showNoDataDialog(context);
-      }
+      print('⚠ حدث استثناء أثناء جلب البيانات: $e');
+      emit(PrayerTimesError("يرجي الإتصال بالإنترنت لعرض مواقيت الصلاة"));
     }
-  }
-
-  void showNoDataDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible:
-          false, // Prevent closing the dialog by tapping outside
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'تنبيه',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: const Text(
-            textAlign: TextAlign.end,
-            'يرجي الاتصال بالانترنت لجلب البيانات... الآن بعد الإغلاق سيعرض مواقيت الصلاة لدولة مصر ، محافظة القاهرة',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => HomePageAppApp(
-                //       suraJsonData: '',
-                //     ),
-                //   ),
-                //   (route) => false, // Remove all previous routes
-                // );
-
-                fetchPrayerTimes(
-                    'Cairo', 'Egypt', context); // جلب مواقيت الصلاة
-              },
-              child: const Text(
-                'إغلاق',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   String getPrayerName(DateTime nextPrayerTime, PrayerTimes prayerTimes) {
     DateFormat dateFormat = DateFormat('HH:mm');
     DateTime fajr = dateFormat.parse(prayerTimes.fajr);
+    DateTime sunrise = dateFormat.parse(prayerTimes.sunrise);
     DateTime dhuhr = dateFormat.parse(prayerTimes.dhuhr);
     DateTime asr = dateFormat.parse(prayerTimes.asr);
     DateTime maghrib = dateFormat.parse(prayerTimes.maghrib);
@@ -187,6 +148,9 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     if (nextPrayerTime.hour == fajr.hour &&
         nextPrayerTime.minute == fajr.minute) {
       return 'الفجر';
+    } else if (nextPrayerTime.hour == sunrise.hour &&
+        nextPrayerTime.minute == sunrise.minute) {
+      return 'الشروق';
     } else if (nextPrayerTime.hour == dhuhr.hour &&
         nextPrayerTime.minute == dhuhr.minute) {
       return 'الظهر';
@@ -223,8 +187,8 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     final DateTime parsedTime = timeFormat.parse(time);
 
     // Format the time in 12-hour format with AM/PM
-    final DateFormat arabicTimeFormat = DateFormat('h:mm');
-    final String formattedTime = arabicTimeFormat.format(parsedTime);
+    final DateFormat arabicTimeFormat = DateFormat('hh:mm');
+    String formattedTime = arabicTimeFormat.format(parsedTime);
 
     // Replace English numerals with Arabic numerals
     return formattedTime.replaceAllMapped(
@@ -274,6 +238,7 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     // تحويل أوقات الصلاة إلى كائنات DateTime اليوم
     Map<String, DateTime> times = {
       'الفجر': dateFormat.parse(prayerTimes.fajr),
+      'الشروق': dateFormat.parse(prayerTimes.sunrise),
       'الظهر': dateFormat.parse(prayerTimes.dhuhr),
       'العصر': dateFormat.parse(prayerTimes.asr),
       'المغرب': dateFormat.parse(prayerTimes.maghrib),
@@ -325,6 +290,7 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
 
     Map<String, DateTime> prayerTimesMap = {
       'الفجر': dateFormat.parse(prayerTimes.fajr),
+      // 'الشروق': dateFormat.parse(prayerTimes.sunrise),
       'الظهر': dateFormat.parse(prayerTimes.dhuhr),
       'العصر': dateFormat.parse(prayerTimes.asr),
       'المغرب': dateFormat.parse(prayerTimes.maghrib),

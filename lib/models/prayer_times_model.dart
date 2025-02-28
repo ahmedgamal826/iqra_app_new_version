@@ -1,5 +1,6 @@
 class PrayerTimes {
   final String fajr;
+  final String sunrise;
   final String dhuhr;
   final String asr;
   final String maghrib;
@@ -7,6 +8,7 @@ class PrayerTimes {
 
   PrayerTimes({
     required this.fajr,
+    required this.sunrise,
     required this.dhuhr,
     required this.asr,
     required this.maghrib,
@@ -16,6 +18,7 @@ class PrayerTimes {
   factory PrayerTimes.fromJson(Map<String, dynamic> json) {
     return PrayerTimes(
       fajr: json['Fajr'] as String,
+      sunrise: json['Sunrise'] as String,
       dhuhr: json['Dhuhr'] as String,
       asr: json['Asr'] as String,
       maghrib: json['Maghrib'] as String,

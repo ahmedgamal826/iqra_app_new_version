@@ -19,7 +19,9 @@ class SearchNumbersListView extends StatelessWidget {
       builder: (context, brightness, child) {
         return Column(
           children: [
-            Container(
+            Card(
+              elevation: 7,
+              color: Colors.white,
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(

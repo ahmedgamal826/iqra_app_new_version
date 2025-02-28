@@ -35,6 +35,7 @@ class _QiblahPermissionState extends State<QiblahPermission>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
@@ -49,7 +50,7 @@ class _QiblahPermissionState extends State<QiblahPermission>
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.green,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -60,7 +61,6 @@ class _QiblahPermissionState extends State<QiblahPermission>
           ),
         ],
       ),
-      backgroundColor: Colors.brown,
       body: StreamBuilder<QiblahDirection>(
         stream: FlutterQiblah.qiblahStream,
         builder: (context, snapshot) {
@@ -93,13 +93,13 @@ class _QiblahPermissionState extends State<QiblahPermission>
                   ),
                   SizedBox(height: screenHeight * 0.09),
                   SizedBox(
-                    height: 300,
+                    height: MediaQuery.of(context).size.height * 0.35,
                     child: AnimatedBuilder(
                       animation: animation!,
                       builder: (context, child) => Transform.rotate(
                         angle: animation!.value,
                         child: Image.asset(
-                          'assets/images/qibla_original.png',
+                          'assets/images/qibla_image.jpg',
                         ),
                       ),
                     ),

@@ -69,22 +69,34 @@ class _FollowPrayersState extends State<FollowPrayers> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
+
         child: Container(
           width: double.infinity,
           height: screenHeight * 0.23,
           decoration: BoxDecoration(
-            color: Colors.brown,
-            borderRadius: BorderRadius.circular(20),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/prayer_background33.png'),
+              fit: BoxFit.cover,
+            ),
+            borderRadius:
+                BorderRadius.circular(20), // إضافة زوايا مستديرة للصندوق
           ),
           child: Stack(
-            alignment: Alignment.center,
             children: [
-              const Positioned.fill(
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  color: Colors.white.withOpacity(0.8),
+                ),
+                // لون شفاف يغطي الصورة
+              ),
+              Positioned.fill(
                 child: Align(
                   alignment: Alignment.center,
                   child: Divider(
                     thickness: 2,
-                    color: Colors.white,
+                    color:
+                        Colors.black.withOpacity(0.8), // جعل الخط شفافًا أيضًا
                     indent: 20,
                     endIndent: 20,
                   ),
@@ -97,16 +109,17 @@ class _FollowPrayersState extends State<FollowPrayers> {
                     Text(
                       'لقد قمت بأداء $_completedCount / 5 صلوات اليوم',
                       style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
+                        fontSize: 20,
+                        color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: List.generate(5, (index) {
-                        int prayerIndex =
-                            (4 - index) % 5; // Reverse the index for display
+                        int prayerIndex = (4 - index) % 5;
                         final getFollowPrayers =
                             BlocProvider.of<PrayerTimesCubit>(context);
                         final prayerTimesCubit =
@@ -139,7 +152,7 @@ class _FollowPrayersState extends State<FollowPrayers> {
                                       _completedCount = _prayerCompleted
                                           .where((completed) => completed)
                                           .length;
-                                      _savePrayerStatus(); // Save the updated status
+                                      _savePrayerStatus();
                                     });
                                   } else {
                                     _showTimeNotReachedDialog(prayerIndex);
@@ -151,7 +164,7 @@ class _FollowPrayersState extends State<FollowPrayers> {
                                 getFollowPrayers
                                     .getFollowPrayerName(prayerIndex),
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -167,6 +180,111 @@ class _FollowPrayersState extends State<FollowPrayers> {
             ],
           ),
         ),
+        // child: Container(
+        //   width: double.infinity,
+        //   height: screenHeight * 0.23,
+        //   // decoration: BoxDecoration(
+        //   //   color: Colors.green,
+        //   //   borderRadius: BorderRadius.circular(20),
+        //   // ),
+
+        //   decoration: const BoxDecoration(
+        //     image: DecorationImage(
+        //       image: AssetImage('assets/images/prayer_background33.png'),
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        //   child: Stack(
+        //     alignment: Alignment.center,
+        //     children: [
+        //       const Positioned.fill(
+        //         child: Align(
+        //           alignment: Alignment.center,
+        //           child: Divider(
+        //             thickness: 2,
+        //             color: Colors.white,
+        //             indent: 20,
+        //             endIndent: 20,
+        //           ),
+        //         ),
+        //       ),
+        //       SingleChildScrollView(
+        //         child: Column(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             Text(
+        //               'لقد قمت بأداء $_completedCount / 5 صلوات اليوم',
+        //               style: const TextStyle(
+        //                 fontSize: 18,
+        //                 color: Colors.white,
+        //               ),
+        //             ),
+        //             const SizedBox(height: 10),
+        //             Row(
+        //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //               children: List.generate(5, (index) {
+        //                 int prayerIndex =
+        //                     (4 - index) % 5; // Reverse the index for display
+        //                 final getFollowPrayers =
+        //                     BlocProvider.of<PrayerTimesCubit>(context);
+        //                 final prayerTimesCubit =
+        //                     context.read<PrayerTimesCubit>();
+
+        //                 return Expanded(
+        //                   child: Column(
+        //                     mainAxisSize: MainAxisSize.min,
+        //                     children: [
+        //                       IconButton(
+        //                         icon: Icon(
+        //                           _prayerCompleted[prayerIndex]
+        //                               ? Icons.check_circle
+        //                               : Icons.check_circle_outline,
+        //                           color: _prayerCompleted[prayerIndex] &&
+        //                                   prayerTimesCubit.isPrayerTimePassed(
+        //                                     prayerIndex,
+        //                                     widget.prayerTimes,
+        //                                   )
+        //                               ? Colors.green
+        //                               : Colors.grey,
+        //                           size: 45,
+        //                         ),
+        //                         onPressed: () {
+        //                           if (prayerTimesCubit.isPrayerTimePassed(
+        //                               prayerIndex, widget.prayerTimes)) {
+        //                             setState(() {
+        //                               _prayerCompleted[prayerIndex] =
+        //                                   !_prayerCompleted[prayerIndex];
+        //                               _completedCount = _prayerCompleted
+        //                                   .where((completed) => completed)
+        //                                   .length;
+        //                               _savePrayerStatus(); // Save the updated status
+        //                             });
+        //                           } else {
+        //                             _showTimeNotReachedDialog(prayerIndex);
+        //                           }
+        //                         },
+        //                       ),
+        //                       const SizedBox(height: 10),
+        //                       Text(
+        //                         getFollowPrayers
+        //                             .getFollowPrayerName(prayerIndex),
+        //                         style: const TextStyle(
+        //                           color: Colors.white,
+        //                           fontSize: 18,
+        //                           fontWeight: FontWeight.bold,
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 );
+        //               }),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
@@ -218,7 +336,7 @@ class _FollowPrayersState extends State<FollowPrayers> {
           actions: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
+                backgroundColor: Colors.green.withOpacity(0.8),
               ),
               child: const Text(
                 'موافق',

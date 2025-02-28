@@ -131,24 +131,25 @@ class HomePageAhades extends StatelessWidget {
     ahadesCubit.loadSectionsFromFile();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
           size: 30,
         ),
         elevation: 0,
-        backgroundColor: Colors.brown,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Image.asset(
-              'assets/images/prophet_mosque.png',
-              width: 45,
-            ),
-          ),
-        ],
+        backgroundColor: Colors.green,
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: Image.asset(
+        //       'assets/images/prophet_mosque.png',
+        //       width: 45,
+        //     ),
+        //   ),
+        // ],
         title: const Text(
-          "أحاديث متنوعة",
+          "الأحاديث الشريفة",
           style: TextStyle(
               fontFamily: 'Tajawal',
               fontSize: 30,
@@ -170,7 +171,7 @@ class HomePageAhades extends StatelessWidget {
             if (state is AhadesLoading) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               );
             } else if (state is AhadesSectionsLoaded) {
@@ -200,7 +201,7 @@ class HomePageAhades extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: Colors.brown,
+                      color: Colors.green,
                     ),
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {

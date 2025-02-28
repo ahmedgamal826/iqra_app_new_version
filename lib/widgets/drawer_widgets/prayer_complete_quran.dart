@@ -11,23 +11,20 @@ class PrayerCompleteQuran extends StatelessWidget {
     return Consumer<providerBrightness>(
       builder: (context, brightness, child) {
         return Scaffold(
-          backgroundColor:
-              brightness.isDark ? Colors.white : const Color(0xffF5EDD8),
+          backgroundColor: Colors.white,
           appBar: AppBar(
-              backgroundColor:
-                  brightness.isDark ? Colors.black : const Color(0xffF5EDD8),
-              iconTheme: IconThemeData(
+              backgroundColor: brightness.isDark ? Colors.black : Colors.green,
+              iconTheme: const IconThemeData(
                 size: 30,
-                color: brightness.isDark ? Colors.white : blackColor,
+                color: Colors.white,
               ),
               centerTitle: true,
-              title: Text(
+              title: const Text(
                 'دعاء ختم القرآن',
                 style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: brightness.isDark ? Colors.white : blackColor,
-                ),
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
               actions: [
                 Padding(
@@ -35,7 +32,7 @@ class PrayerCompleteQuran extends StatelessWidget {
                   child: Image.asset(
                     'assets/images/dua-hands.png',
                     width: 40,
-                    color: brightness.isDark ? Colors.white : Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ]),
@@ -45,21 +42,19 @@ class PrayerCompleteQuran extends StatelessWidget {
               reverse: true,
               children: [
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: brightness.isDark
-                            ? const AssetImage('assets/images/prayer1.jpg')
-                            : const AssetImage('assets/images/prayer11.jpg'),
-                        fit: BoxFit.fill),
+                      image: AssetImage('assets/images/prayer1.jpg'),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: brightness.isDark
-                            ? const AssetImage('assets/images/prayer2.jpg')
-                            : const AssetImage('assets/images/prayer22.jpg'),
-                        fit: BoxFit.fill),
+                      image: AssetImage('assets/images/prayer2.jpg'),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ],

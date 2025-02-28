@@ -19,25 +19,43 @@ Widget buildSectionItem(
                 ),
               )));
     },
-    child: Container(
-      margin: const EdgeInsets.only(top: 12.0),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.brown,
-        border: Border.all(color: Colors.black, width: 1.5),
-        // color: model.id! % 2 == 0 ? Colors.brown : Colors.brown.shade400,
-        borderRadius: BorderRadius.circular(7),
+    child: Card(
+      color: Colors.white,
+      elevation: 7,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
       ),
-      child: Center(
-        child: Text(
-          textAlign: TextAlign.center,
-          "${model.name}",
-          style: const TextStyle(
-            fontSize: 27,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // الصورة
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(15),
+            ),
+            child: Image.asset(
+              model.icon!,
+
+              height: MediaQuery.of(context).size.height * 0.1,
+              // fit: BoxFit.cover,
+            ),
           ),
-        ),
+
+          // الاسم تحت الصورة
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              model.name!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     ),
   );

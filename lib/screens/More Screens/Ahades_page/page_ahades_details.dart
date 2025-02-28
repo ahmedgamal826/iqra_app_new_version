@@ -21,10 +21,10 @@ class PageAhadesDetailsState extends State<PageAhadesDetails> {
     return BlocProvider(
       create: (context) => AhadesCubit()..loadSectionAhadesDetails(widget.id),
       child: Scaffold(
-        backgroundColor: const Color(0xffE6DECB),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           iconTheme: const IconThemeData(
-            size: 35,
+            size: 30,
             color: Colors.white,
           ),
           centerTitle: true,
@@ -36,14 +36,14 @@ class PageAhadesDetailsState extends State<PageAhadesDetails> {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.brown,
+          backgroundColor: Colors.green,
         ),
         body: BlocBuilder<AhadesCubit, AhadesStates>(
           builder: (context, state) {
             if (state is AhadesLoading) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               );
             } else if (state is AhadesSectionDetailsLoaded) {
@@ -67,24 +67,47 @@ class PageAhadesDetailsState extends State<PageAhadesDetails> {
                       children: [
                         Center(
                           child: ListTile(
-                            subtitle: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.orangeAccent.withOpacity(0.1),
-                                border:
-                                    Border.all(color: Colors.brown, width: 1.5),
+                            subtitle: Card(
+                              color: Colors.white,
+                              elevation: 8,
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(7),
-                                shape: BoxShape.rectangle,
                               ),
-                              child: Text(
-                                "${sectionDetails[index].content}",
-                                textDirection: TextDirection.rtl,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                    8.0), // إضافة مسافة داخلية
+                                child: Text(
+                                  "${sectionDetails[index].content}",
+                                  textDirection: TextDirection.rtl,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ),
                             ),
+                            // subtitle: Container(
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.orangeAccent.withOpacity(0.1),
+                            //     border: Border.all(
+                            //       color: Colors.green,
+                            //       width: 1.5,
+                            //     ),
+                            //     borderRadius: BorderRadius.circular(7),
+                            //     shape: BoxShape.rectangle,
+                            //   ),
+                            //   child: Text(
+                            //     "${sectionDetails[index].content}",
+                            //     textDirection: TextDirection.rtl,
+                            //     textAlign: TextAlign.center,
+                            //     style: const TextStyle(
+                            //         fontSize: 24,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.black),
+                            //   ),
+                            // ),
                           ),
                         ),
                         const SizedBox(

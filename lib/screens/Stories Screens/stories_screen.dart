@@ -16,13 +16,14 @@ class StoriesScreen extends StatelessWidget {
     storiesCubit.loadSectionsFromFile(); // تحميل البيانات من الملف
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
           size: 30,
         ),
         elevation: 0,
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.green,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -56,7 +57,7 @@ class StoriesScreen extends StatelessWidget {
             if (state is StoriesLoading) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               );
             } else if (state is StoriesSectionsLoaded) {
@@ -64,7 +65,6 @@ class StoriesScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: GridView.builder(
                   itemCount: state.Storiessections.length,
-                  physics: const BouncingScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 12.0,
@@ -99,7 +99,7 @@ class StoriesScreen extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: Colors.brown,
+                      color: Colors.green,
                     ),
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {

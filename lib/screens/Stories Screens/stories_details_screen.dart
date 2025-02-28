@@ -20,10 +20,10 @@ class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
     return BlocProvider(
       create: (context) => StoriesCubit()..loadSectionStoriesDetails(widget.id),
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 239, 231, 214),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           iconTheme: const IconThemeData(
-            size: 35,
+            size: 30,
             color: Colors.white,
           ),
           centerTitle: true,
@@ -35,14 +35,14 @@ class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.brown,
+          backgroundColor: Colors.green,
         ),
         body: BlocBuilder<StoriesCubit, StoriesStates>(
           builder: (context, state) {
             if (state is StoriesLoading) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               );
             } else if (state is StoriesSectionDetailsLoaded) {
@@ -73,11 +73,12 @@ class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          contentPadding: EdgeInsets.all(10),
                           subtitle: Container(
                             decoration: BoxDecoration(
-                              color: Colors.orangeAccent.withOpacity(0.1),
+                              color: Colors.white,
                               border:
-                                  Border.all(color: Colors.brown, width: 1.5),
+                                  Border.all(color: Colors.green, width: 1.5),
                               borderRadius: BorderRadius.circular(7),
                               // color: const Color(0xffD4BEB0),
                               shape: BoxShape.rectangle,
@@ -87,9 +88,10 @@ class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
@@ -100,7 +102,7 @@ class PageAhadesDetailsState extends State<StoriesDetailsScreen> {
                       const Divider(
                         indent: 25,
                         endIndent: 25,
-                        color: Colors.black,
+                        color: Colors.green,
                         thickness: 3,
                       )
                     ],

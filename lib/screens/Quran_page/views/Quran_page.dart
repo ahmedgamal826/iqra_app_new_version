@@ -75,11 +75,10 @@ class _QuranPageState extends State<QuranPage> {
     return Consumer<providerBrightness>(
       builder: (context, themeProvider, child) {
         return Scaffold(
-          backgroundColor:
-              themeProvider.isDark ? Colors.black : quranPagesColor,
+          backgroundColor: themeProvider.isDark ? Colors.black : Colors.white,
           appBar: AppBar(
             iconTheme: const IconThemeData(color: Colors.white, size: 28),
-            backgroundColor: themeProvider.isDark ? Colors.black : Colors.brown,
+            backgroundColor: themeProvider.isDark ? Colors.black : Colors.green,
             centerTitle: true,
             title: const Text(
               "فهرس القرآن الكريم",
@@ -123,7 +122,7 @@ class _QuranPageState extends State<QuranPage> {
                     return Center(
                       child: CircularProgressIndicator(
                         color:
-                            themeProvider.isDark ? Colors.white : Colors.brown,
+                            themeProvider.isDark ? Colors.white : Colors.green,
                       ),
                     );
                   },

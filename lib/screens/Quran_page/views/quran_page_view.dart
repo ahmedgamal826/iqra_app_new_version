@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:iqra_app_new_version_22/globalhelpers/constants.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/provider_brightness.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/show_snack_bar.dart';
 import 'package:iqra_app_new_version_22/widgets/quran%20widgets/page_juz_map.dart';
@@ -74,7 +73,9 @@ class _QuranPageViewState extends State<QuranPageView> {
         return Dialog(
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.brown, borderRadius: BorderRadius.circular(40)),
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(30),
+            ),
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -147,9 +148,8 @@ class _QuranPageViewState extends State<QuranPageView> {
                       child: Consumer<providerBrightness>(
                         builder: (context, brightness, child) {
                           return Scaffold(
-                            backgroundColor: brightness.isDark
-                                ? Colors.black
-                                : const Color(0xffF5EED8),
+                            backgroundColor:
+                                brightness.isDark ? Colors.black : Colors.white,
                             appBar: AppBar(
                               iconTheme: IconThemeData(
                                 color: brightness.isDark
@@ -158,7 +158,7 @@ class _QuranPageViewState extends State<QuranPageView> {
                               ),
                               backgroundColor: brightness.isDark
                                   ? Colors.black
-                                  : const Color(0xffF5EED8),
+                                  : Colors.white,
                               centerTitle: true,
                               title: Text(
                                 'القرآن الكريم',
@@ -199,8 +199,15 @@ class _QuranPageViewState extends State<QuranPageView> {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.only(left: 10, top: 10),
-                                child: SingleChildScrollViewWidget(
-                                    index: index, jsonData: widget.jsonData),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: SingleChildScrollViewWidget(
+                                          index: index,
+                                          jsonData: widget.jsonData),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );

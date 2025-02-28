@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1012023264619",
+    "project_id": "islamic-questions-f0522",
+    "storage_bucket": "islamic-questions-f0522.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012023264619:android:413118a48d7a6dc4e1382e",
+        "android_client_info": {
+          "package_name": "com.example.birthday_card_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1gTJupa1GVBuUlcTa6-1Kb9uqO0Btarw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

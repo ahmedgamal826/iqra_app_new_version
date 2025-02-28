@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,24 +8,24 @@ import 'package:iqra_app_new_version_22/cubit/azkar%20bloc/azkar_cubit.dart';
 import 'package:iqra_app_new_version_22/cubit/prayer_times_bloc/prayer_times_cubit.dart';
 import 'package:iqra_app_new_version_22/cubit/stories%20bloc/stories_cubit.dart';
 import 'package:iqra_app_new_version_22/cubit/tasbih%20bloc/counter_tasbih_cubit.dart';
+import 'package:iqra_app_new_version_22/firebase_options.dart';
 import 'package:iqra_app_new_version_22/screens/splash_screen.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/provider_brightness.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
-  await initializeDateFormatting('ar', '');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  String selectedCountry = 'Egypt';
-  String selectedCity = 'Cairo';
-  BuildContext? context;
+  await initializeDateFormatting('ar', '');
 
   runApp(
     MultiProvider(
       providers: [
-        BlocProvider(
-            create: (_) => PrayerTimesCubit()
-              ..fetchPrayerTimes(selectedCity, selectedCountry, context)),
+        BlocProvider(create: (_) => PrayerTimesCubit()..fetchPrayerTimes()),
         ChangeNotifierProvider(
           create: (_) => providerBrightness(),
         ),
@@ -67,6 +68,11 @@ class _IqraAppState extends State<IqraApp> {
   void initState() {
     super.initState();
     loadJsonAsset();
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+    ));
   }
 
   @override
@@ -74,11 +80,11 @@ class _IqraAppState extends State<IqraApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.white,
         body: widgejsonData == null
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               )
             : SplashScreen(suraJsonData: widgejsonData),

@@ -5,6 +5,7 @@ class Names extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
@@ -20,7 +21,7 @@ class Names extends StatelessWidget {
           ),
         ],
         centerTitle: true,
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.green,
         title: const Text(
           'أسماء الله الحسنى',
           style: TextStyle(
@@ -36,27 +37,36 @@ class Names extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Container(
-            width: 250,
-            height: 100,
-            padding: const EdgeInsets.symmetric(horizontal: 21),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
+          Card(
+            elevation: 10,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.brown,
-              border: Border.all(color: Colors.black, width: 1.5),
             ),
-            child: const SelectableText(
-              'الله',
-              style: TextStyle(
-                  fontSize: 60, fontFamily: 'Rakkas', color: Colors.white),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.6,
+              height: MediaQuery.of(context).size.height * 0.12,
+              padding: const EdgeInsets.symmetric(horizontal: 21),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+                border: Border.all(color: Colors.black, width: 1.5),
+              ),
+              child: const SelectableText(
+                'الله',
+                style: TextStyle(
+                  fontSize: 60,
+                  fontFamily: 'Rakkas',
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
           Expanded(
             child: Directionality(
               textDirection: TextDirection.rtl,
               child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(8),
                 itemCount: nameList.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -66,21 +76,26 @@ class Names extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   listOfNames names = nameList[index];
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 21),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.brown,
-                      border: Border.all(color: Colors.black, width: 1.5),
+
+                  return Card(
+                    elevation: 7,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                      // color: Colors.brown,
                     ),
-                    child: SelectableText(
-                      names.text,
-                      style: const TextStyle(
-                          fontSize: 26,
-                          fontFamily: 'Rakkas',
-                          color: Colors.white),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black, width: 1.5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: SelectableText(
+                        names.text,
+                        style: const TextStyle(
+                            fontSize: 26,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   );
                 },

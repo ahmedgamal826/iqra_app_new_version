@@ -128,9 +128,11 @@ class AzkarHomePage extends StatelessWidget {
     azkarCubit.loadSectionsFromFile();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.green,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -164,13 +166,14 @@ class AzkarHomePage extends StatelessWidget {
             if (state is AzkarLoading) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               );
             } else if (state is AzkarSectionsLoaded) {
               return Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(20),
                 child: GridView.builder(
+                  padding: const EdgeInsets.only(bottom: 10.0),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // Number of columns
                     crossAxisSpacing: 10.0, // Space between columns
@@ -195,7 +198,7 @@ class AzkarHomePage extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: Colors.brown,
+                      color: Colors.green,
                     ),
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {
@@ -207,12 +210,12 @@ class AzkarHomePage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: GridView.builder(
+                      padding: const EdgeInsets.only(bottom: 10.0),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // Number of columns
                         crossAxisSpacing: 10.0, // Space between columns
                         mainAxisSpacing: 10.0, // Space between rows
-                        childAspectRatio: 1.0, // Aspect ratio for grid items
                       ),
                       itemBuilder: (context, index) => buildSectionItem(
                           model: sections[index], context: context),
