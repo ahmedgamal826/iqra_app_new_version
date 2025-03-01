@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -25,9 +26,43 @@ class _AudioPlayerNewScreenState extends State<AudioPlayerNewScreen> {
     setupPlayer();
   }
 
+  // Future<void> setupPlayer() async {
+  //   try {
+  //     await _audioPlayer.setUrl(widget.audioUrl);
+  //     setState(() => isLoading = false);
+  //     _audioPlayer.play();
+  //   } catch (e) {
+  //     print("خطأ في تحميل الصوت: $e");
+  //     setState(() => isLoading = false);
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(
+  //           "خطأ في تحميل الصوت: لا يوجد اتصال بالإنترنت",
+  //           textAlign: TextAlign.right,
+  //           style: TextStyle(fontSize: 16),
+  //         ),
+  //         backgroundColor: Colors.red,
+  //         behavior: SnackBarBehavior.floating, // يجعل الـ SnackBar عائمًا
+  //         margin: EdgeInsets.all(20), // يضيف مسافة خارجية من جميع الجهات
+  //         duration: Duration(seconds: 3),
+  //       ),
+  //     );
+  //   }
+  // }
+
   Future<void> setupPlayer() async {
     try {
-      await _audioPlayer.setUrl(widget.audioUrl);
+      await _audioPlayer.setAudioSource(
+        AudioSource.uri(
+          Uri.parse(widget.audioUrl),
+          tag: MediaItem(
+            id: '1',
+            album: "القرآن الكريم",
+            title: widget.surahName,
+            artUri: Uri.parse("asset://assets/images/audio_quran.png"),
+          ),
+        ),
+      );
       setState(() => isLoading = false);
       _audioPlayer.play();
     } catch (e) {
@@ -41,8 +76,8 @@ class _AudioPlayerNewScreenState extends State<AudioPlayerNewScreen> {
             style: TextStyle(fontSize: 16),
           ),
           backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating, // يجعل الـ SnackBar عائمًا
-          margin: EdgeInsets.all(20), // يضيف مسافة خارجية من جميع الجهات
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(20),
           duration: Duration(seconds: 3),
         ),
       );

@@ -11,6 +11,7 @@ import 'package:iqra_app_new_version_22/cubit/tasbih%20bloc/counter_tasbih_cubit
 import 'package:iqra_app_new_version_22/firebase_options.dart';
 import 'package:iqra_app_new_version_22/screens/splash_screen.dart';
 import 'package:iqra_app_new_version_22/widgets/drawer_widgets/provider_brightness.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -21,7 +22,11 @@ void main() async {
   );
 
   await initializeDateFormatting('ar', '');
-
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.example.audio',
+    androidNotificationChannelName: 'تشغيل الصوت',
+    androidNotificationOngoing: true,
+  );
   runApp(
     MultiProvider(
       providers: [

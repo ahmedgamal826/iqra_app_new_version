@@ -31,6 +31,7 @@ dependencies:
   adhan: ^2.0.0+1
   animate_do: ^4.1.1
   arabic_numbers: ^1.0.0
+  audio_service: ^0.18.17
   audio_video_progress_bar: ^2.0.3
   audioplayers: ^6.1.2
   awesome_dialog: ^3.2.1
@@ -54,6 +55,7 @@ dependencies:
   intl: ^0.19.0
   intl_translation: ^0.20.0
   just_audio: ^0.9.46
+  just_audio_background: ^0.0.1-beta.15
   permission_handler: ^11.3.1
   provider: ^6.1.2
   quran:

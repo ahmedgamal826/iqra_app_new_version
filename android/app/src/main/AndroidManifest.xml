@@ -1,21 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.birthday_card_app">
+
 
     <!-- الأذونات المطلوبة -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+
     <application
+        android:name=".MyApplication"
         android:label="رفيق المسلم"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.ryanheise.audioservice.AudioServiceActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -33,6 +34,7 @@
             </intent-filter>
         </activity>
 
+        <!-- مستقبل الإشعارات عند تشغيل الهاتف -->
         <receiver
             android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmBroadcastReceiver"
             android:exported="false">
@@ -41,10 +43,32 @@
             </intent-filter>
         </receiver>
 
-        <!-- خدمة الخلفية لتشغيل الأذان -->
+        <!-- ADD THIS "RECEIVER" element -->
+        <receiver android:name="com.ryanheise.audioservice.MediaButtonReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver> 
+
+        <!-- خدمة الخلفية للأذان -->
         <service
             android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmService"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false"/>
+
+        <!-- <service
+            android:name="com.ryanheise.just_audio_background.AudioBackgroundService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false" /> -->
+
+        <service android:name="com.ryanheise.audioservice.AudioService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="true" tools:ignore="Instantiatable">
+        <intent-filter>
+        <action android:name="android.media.browse.MediaBrowserService" />
+        </intent-filter>
+        </service>
 
         <!-- خدمة تشغيل الأذان تلقائيًا -->
         <service
@@ -55,7 +79,8 @@
         <!-- خدمة إشعارات flutter_local_notifications -->
         <service
             android:name="com.dexterous.flutterlocalnotifications.ForegroundService"
-            android:permission="android.permission.FOREGROUND_SERVICE"/>
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:exported="false"/>
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
@@ -65,8 +90,3 @@
     </application>
 
 </manifest>
-
-
-
-
-
